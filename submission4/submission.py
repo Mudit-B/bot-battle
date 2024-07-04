@@ -77,76 +77,33 @@ def main():
                 
 
 def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTerritory) -> MoveClaimTerritory:
-    """At the start of the game, you can claim a single unclaimed territory every turn
+    """At the start of the game, you can claim a single unclaimed territory every turn 
     until all the territories have been claimed by players."""
-    
+
     unclaimed_territories = game.state.get_territories_owned_by(None)
     my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
+
+    # We will try to always pick new territories that are next to ones that we own,
+    # or a random one if that isn't possible.
     adjacent_territories = game.state.get_all_adjacent_territories(my_territories)
 
-    #tsetisng
+    # We can only pick from territories that are unclaimed and adjacent to us.
     available = list(set(unclaimed_territories) & set(adjacent_territories))
+    if len(available) != 0:
 
-    if 32 in unclaimed_territories and not available:
-        return game.move_claim_territory(query, 32)
-    # elif not available:
-    #     for territory in [38, 39, 40, 41]:
-    #         if territory in unclaimed_territories:
-    #             return game.move_claim_territory(query, territory)
-    
-    '''
-    Idea is to claim the territories that are closer to the capturing a whole island / continent
-    '''
-    continents = game.state.map.get_continents()
-    
-    # the percentage of each continent controlled by us, (0.xx, left)
-    continent_control = {}
-    for continent, territories in continents.items():
-        owned = len(set(territories) & set(my_territories))
-        total = len(territories)
-        continent_control[continent] = (owned / total, total - owned)
-    
-    print(continent_control, flush=True)
-    for continent in continent_control:
-        if continent_control[continent][0] == 1:
-            # dont choose this
-            continent_control[continent] = (-1, - 1) 
+        # We will pick the one with the most connections to our territories
+        # this should make our territories clustered together a little bit.
+        def count_adjacent_friendly(x: int) -> int:
+            return len(set(my_territories) & set(game.state.map.get_adjacent_to(x)))
 
-    # continents closest to getting captured by us
-    target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
+        selected_territory = sorted(available, key=lambda x: count_adjacent_friendly(x), reverse=True)[0]
     
-    def eval_terr(territory):
-        # like chess we eval the val of this territory
-        value = 0
-        continent = None
-        for k, territories in continents.items():
-            if territory in territories:
-                continent = continents[k]
-                break
-        if continent == target_continent:
-            value += 3
-        # 1% this too hit and trial this.
-        value += 2 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
-        return value
-
-    def find_best_territory(lst):
-        selected_territory = None
-        for territory in lst:
-            if selected_territory == None:
-                selected_territory = territory
-                print(selected_territory, flush=True)
-            else:
-                if eval_terr(territory) > eval_terr(selected_territory):
-                    selected_territory = territory
-        return selected_territory
-
-    selected_territory = None
-    if available:
-        selected_territory = find_best_territory(available)
+    # Or if there are no such territories, we will pick just an unclaimed one with the greatest degree.
     else:
-        selected_territory = find_best_territory(unclaimed_territories)
-    print(selected_territory, flush=True)
+        selected_territory = sorted(unclaimed_territories, key=lambda x: len(game.state.map.get_adjacent_to(x)), reverse=True)[0]
+
     return game.move_claim_territory(query, selected_territory)
+
 
 def handle_place_initial_troop(game: Game, bot_state: BotState, query: QueryPlaceInitialTroop) -> MovePlaceInitialTroop:
     """After all the territories have been claimed, you can place a single troop on one
@@ -246,6 +203,8 @@ def handle_distribute_troops(game: Game, bot_state: BotState, query: QueryDistri
 
 
     return game.move_distribute_troops(query, distributions)
+
+
 def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[MoveAttack, MoveAttackPass]:
     """After the troop phase of your turn, you may attack any number of times until you decide to
     stop attacking (by passing). After a successful attack, you may move troops into the conquered
@@ -255,34 +214,14 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
     my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
     bordering_territories = game.state.get_all_adjacent_territories(my_territories)
 
-
-    def attack_highest_probability(territories: list[int]) -> Optional[MoveAttack]:
-        best_probability = 0
-        best_move = None
-
-        for target in territories:
-            # Find my attackers
-            adjacent_territories = set(game.state.map.get_adjacent_to(target))
-            potential_attackers = list(adjacent_territories & set(my_territories))
-
-            if not potential_attackers:
-                continue  # No attackers for this target, check the next target
-
-            # Find the highest attacker from my attackers
-            attacker = sorted(potential_attackers, key=lambda t: game.state.territories[t].troops, reverse=True)[0]
-            attacker_troops = game.state.territories[attacker].troops
-            target_troops = game.state.territories[target].troops
-
-            # Calculate the probability of success
-            probability = attacker_troops / target_troops if target_troops > 0 else float('inf')
-
-            # Determine if this is a favorable attack
-            is_favorable_attack = (attacker_troops - target_troops >= 2) and (attacker_troops > 4)
-            if is_favorable_attack and probability > best_probability:
-                best_probability = probability
-                best_move = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
-
-        return best_move
+    def attack_weakest(territories: list[int]) -> Optional[MoveAttack]:
+        # We will attack the weakest territory from the list.
+        territories = sorted(territories, key=lambda x: game.state.territories[x].troops)
+        for candidate_target in territories:
+            candidate_attackers = sorted(list(set(game.state.map.get_adjacent_to(candidate_target)) & set(my_territories)), key=lambda x: game.state.territories[x].troops, reverse=True)
+            for candidate_attacker in candidate_attackers:
+                if game.state.territories[candidate_attacker].troops > 1:
+                    return game.move_attack(query, candidate_attacker, candidate_target, min(3, game.state.territories[candidate_attacker].troops - 1))
 
 
     if len(game.state.recording) < 4000:
@@ -297,7 +236,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
 
         # If we don't have an enemy yet, or we feel angry, this player will become our enemy.
         if enemy != None:
-            if bot_state.enemy == None:
+            if bot_state.enemy == None or random.random() < 0.05:
                 bot_state.enemy = enemy
         
         # If we have no enemy, we will pick the player with the weakest territory bordering us, and make them our enemy.
@@ -305,15 +244,15 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
             weakest_territory = min(bordering_territories, key=lambda x: game.state.territories[x].troops)
             bot_state.enemy = game.state.territories[weakest_territory].occupier
             
-        # We will attack their territory with the highest probability of success if possible.
+        # We will attack their weakest territory that gives us a favourable battle if possible.
         enemy_territories = list(set(bordering_territories) & set(game.state.get_territories_owned_by(enemy)))
-        move = attack_highest_probability(enemy_territories)
+        move = attack_weakest(enemy_territories)
         if move != None:
             return move
         
         # Otherwise we will attack anyone most of the time.
         if random.random() < 0.8:
-            move = attack_highest_probability(bordering_territories)
+            move = attack_weakest(bordering_territories)
             if move != None:
                 return move
 
@@ -321,11 +260,12 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
     else:
         strongest_territories = sorted(my_territories, key=lambda x: game.state.territories[x].troops, reverse=True)
         for territory in strongest_territories:
-            move = attack_highest_probability(list(set(game.state.map.get_adjacent_to(territory)) - set(my_territories)))
+            move = attack_weakest(list(set(game.state.map.get_adjacent_to(territory)) - set(my_territories)))
             if move != None:
                 return move
 
     return game.move_attack_pass(query)
+
 
 def handle_troops_after_attack(game: Game, bot_state: BotState, query: QueryTroopsAfterAttack) -> MoveTroopsAfterAttack:
     """After conquering a territory in an attack, you must move troops to the new territory."""
