@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "/home/mudit/bot-battle/.venv/lib/python3.10/site-packages/pydantic/type_adapter.py", line 277, in _init_core_attrs
+    self._core_schema = _getattr_no_parents(self._type, '__pydantic_core_schema__')
+  File "/home/mudit/bot-battle/.venv/lib/python3.10/site-packages/pydantic/type_adapter.py", line 119, in _getattr_no_parents
+    raise AttributeError(attribute)
+AttributeError: __pydantic_core_schema__
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/mudit/bot-battle/submission1/submission.py", line 394, in <module>
+    main()
+  File "/home/mudit/bot-battle/submission1/submission.py", line 46, in main
+    query = game.get_next_query()
+  File "/home/mudit/bot-battle/risk-helper/src/risk_helper/game.py", line 36, in get_next_query
+    query = self.connection.get_next_query()
+  File "/home/mudit/bot-battle/risk-helper/src/risk_helper/connection.py", line 48, in get_next_query
+    return TypeAdapter(QueryType).validate_json(self._receive())
+  File "/home/mudit/bot-battle/.venv/lib/python3.10/site-packages/pydantic/type_adapter.py", line 264, in __init__
+    self._init_core_attrs(rebuild_mocks=False)
+  File "/home/mudit/bot-battle/.venv/lib/python3.10/site-packages/pydantic/type_adapter.py", line 142, in wrapped
+    return func(self, *args, **kwargs)
+  File "/home/mudit/bot-battle/.venv/lib/python3.10/site-packages/pydantic/type_adapter.py", line 285, in _init_core_attrs
+    self._validator = create_schema_validator(
+  File "/home/mudit/bot-battle/.venv/lib/python3.10/site-packages/pydantic/plugin/_schema_validator.py", line 50, in create_schema_validator
+    return SchemaValidator(schema, config)
+pydantic_core._pydantic_core.SchemaError: Error building "definitions" validator:
+  SchemaError: Error building "model" validator:
+  SchemaError: Error building "model-fields" validator:
+  SchemaError: Field "record_type":
+  SchemaError: Error building "default" validator:
+  SchemaError: Error building "literal" validator:
+  KeyboardInterrupt: 
