@@ -254,9 +254,10 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
         for candidate_target in territories:
             candidate_attackers = sorted(list(set(game.state.map.get_adjacent_to(candidate_target)) & set(my_territories)), key=lambda x: game.state.territories[x].troops, reverse=True)
             for candidate_attacker in candidate_attackers:
-                if game.state.territories[candidate_attacker].troops > 1:
+                # Check if we have at least twice the number of troops compared to the target
+                if (game.state.territories[candidate_attacker].troops - game.state.territories[candidate_target].troops >= 2 and 
+                 game.state.territories[candidate_attacker].troops > 1):
                     return game.move_attack(query, candidate_attacker, candidate_target, min(3, game.state.territories[candidate_attacker].troops - 1))
-
 
     if len(game.state.recording) < 4000:
         # We will check if anyone attacked us in the last round.
@@ -270,7 +271,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
 
         # If we don't have an enemy yet, or we feel angry, this player will become our enemy.
         if enemy != None:
-            if bot_state.enemy == None or random.random() < 0.05:
+            if bot_state.enemy == None:
                 bot_state.enemy = enemy
         
         # If we have no enemy, we will pick the player with the weakest territory bordering us, and make them our enemy.
@@ -299,8 +300,6 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                 return move
 
     return game.move_attack_pass(query)
-
-
 def handle_troops_after_attack(game: Game, bot_state: BotState, query: QueryTroopsAfterAttack) -> MoveTroopsAfterAttack:
     """After conquering a territory in an attack, you must move troops to the new territory."""
     

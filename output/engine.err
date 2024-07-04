@@ -3,20 +3,12 @@ Traceback (most recent call last):
     self._run_game()
   File "/home/mudit/bot-battle/risk-engine/src/risk_engine/game_engine.py", line 149, in _run_game
     self._attack_phase(player, connection)
-  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/game_engine.py", line 212, in _attack_phase
-    attack = connection.query_attack(self.state, self.validator, self.censor)
-  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/connection/player_connection.py", line 220, in query_attack
-    return self._query_move_union(query, MoveAttack, MoveAttackPass, validator)
-  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/connection/player_connection.py", line 77, in dfn
-    result = fn(*args, **kwargs)
-  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/connection/player_connection.py", line 61, in dfn
-    result = fn(*args, **kwargs)
-  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/connection/player_connection.py", line 105, in dfn2
-    result = fn(*args, **kwargs)
-  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/connection/player_connection.py", line 192, in _query_move_union
-    move = adapter.validate_json(self._receive())
-  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/connection/player_connection.py", line 153, in _receive
-    buffer.extend(self._to_engine_pipe.read(1).encode())
+  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/game_engine.py", line 225, in _attack_phase
+    defend = self.connections[defending_player].query_defend(self.state, self.validator, self.censor, move_attack_id)
+  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/connection/player_connection.py", line 224, in query_defend
+    query = QueryDefend(move_attack_id=move_attack_id, update=self._get_record_update_dict(state, censor))
+  File "/home/mudit/bot-battle/risk-engine/src/risk_engine/connection/player_connection.py", line 203, in _get_record_update_dict
+    result = dict([(i, censor.censor(x, self.player_id)) for i, x in list(enumerate(state.recording))[self._record_update_watermark:]])
 KeyboardInterrupt
 
 During handling of the above exception, another exception occurred:

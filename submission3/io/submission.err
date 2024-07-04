@@ -1,5 +1,5 @@
 Traceback (most recent call last):
-  File "/home/mudit/bot-battle/submission3/submission.py", line 394, in <module>
+  File "/home/mudit/bot-battle/submission3/submission.py", line 393, in <module>
     main()
   File "/home/mudit/bot-battle/submission3/submission.py", line 46, in main
     query = game.get_next_query()
