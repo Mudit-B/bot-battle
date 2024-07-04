@@ -77,74 +77,33 @@ def main():
                 
 
 def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTerritory) -> MoveClaimTerritory:
-    """At the start of the game, you can claim a single unclaimed territory every turn
+    """At the start of the game, you can claim a single unclaimed territory every turn 
     until all the territories have been claimed by players."""
-    
+
     unclaimed_territories = game.state.get_territories_owned_by(None)
     my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
+
+    # We will try to always pick new territories that are next to ones that we own,
+    # or a random one if that isn't possible.
     adjacent_territories = game.state.get_all_adjacent_territories(my_territories)
+
+    # We can only pick from territories that are unclaimed and adjacent to us.
     available = list(set(unclaimed_territories) & set(adjacent_territories))
-    print(available)
-    # if 32 in unclaimed_territories and not available:
-    #     return game.move_claim_territory(query, 32)
-    # elif not available:
-    #     for territory in [38, 39, 40, 41]:
-    #         if territory in unclaimed_territories:
-    #             return game.move_claim_territory(query, territory)
-    
-    '''
-    Idea is to claim the territories that are closer to the capturing a whole island / continent
-    '''
-    continents = game.state.map.get_continents()
-    
-    # the percentage of each continent controlled by us, (0.xx, left)
-    continent_control = {}
-    for continent, territories in continents.items():
-        owned = len(set(territories) & set(my_territories))
-        total = len(territories)
-        continent_control[continent] = (owned / total, total - owned)
-    
-    print(continent_control, flush=True)
-    for continent in continent_control:
-        if continent_control[continent][0] == 1:
-            # dont choose this
-            continent_control[continent] = (-1, - 1) 
+    if len(available) != 0:
 
-    # continents closest to getting captured by us
-    target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
+        # We will pick the one with the most connections to our territories
+        # this should make our territories clustered together a little bit.
+        def count_adjacent_friendly(x: int) -> int:
+            return len(set(my_territories) & set(game.state.map.get_adjacent_to(x)))
+
+        selected_territory = sorted(available, key=lambda x: count_adjacent_friendly(x), reverse=True)[0]
     
-    def eval_terr(territory):
-        # like chess we eval the val of this territory
-        value = 0
-        continent = None
-        for k, territories in continents.items():
-            if territory in territories:
-                continent = continents[k]
-                break
-        if continent == target_continent:
-            value += 3
-        # 1% this too hit and trial this.
-        value += 2 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
-        return value
-
-    def find_best_territory(lst):
-        selected_territory = None
-        for territory in lst:
-            if selected_territory == None:
-                selected_territory = territory
-                print(selected_territory, flush=True)
-            else:
-                if eval_terr(territory) > eval_terr(selected_territory):
-                    selected_territory = territory
-        return selected_territory
-
-    selected_territory = None
-    if available:
-        selected_territory = find_best_territory(available)
+    # Or if there are no such territories, we will pick just an unclaimed one with the greatest degree.
     else:
-        selected_territory = find_best_territory(unclaimed_territories)
-    print(selected_territory, flush=True)
+        selected_territory = sorted(unclaimed_territories, key=lambda x: len(game.state.map.get_adjacent_to(x)), reverse=True)[0]
+
     return game.move_claim_territory(query, selected_territory)
+
 
 def handle_place_initial_troop(game: Game, bot_state: BotState, query: QueryPlaceInitialTroop) -> MovePlaceInitialTroop:
     """After all the territories have been claimed, you can place a single troop on one
@@ -261,10 +220,9 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
         for candidate_target in territories:
             candidate_attackers = sorted(list(set(game.state.map.get_adjacent_to(candidate_target)) & set(my_territories)), key=lambda x: game.state.territories[x].troops, reverse=True)
             for candidate_attacker in candidate_attackers:
-                # Check if we have at least twice the number of troops compared to the target
-                if (game.state.territories[candidate_attacker].troops - game.state.territories[candidate_target].troops >= 2 and 
-                 game.state.territories[candidate_attacker].troops > 4):
+                if game.state.territories[candidate_attacker].troops > 1:
                     return game.move_attack(query, candidate_attacker, candidate_target, min(3, game.state.territories[candidate_attacker].troops - 1))
+
 
     if len(game.state.recording) < 4000:
         # We will check if anyone attacked us in the last round.
@@ -278,7 +236,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
 
         # If we don't have an enemy yet, or we feel angry, this player will become our enemy.
         if enemy != None:
-            if bot_state.enemy == None:
+            if bot_state.enemy == None or random.random() < 0.05:
                 bot_state.enemy = enemy
         
         # If we have no enemy, we will pick the player with the weakest territory bordering us, and make them our enemy.
@@ -307,6 +265,8 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                 return move
 
     return game.move_attack_pass(query)
+
+
 def handle_troops_after_attack(game: Game, bot_state: BotState, query: QueryTroopsAfterAttack) -> MoveTroopsAfterAttack:
     """After conquering a territory in an attack, you must move troops to the new territory."""
     
