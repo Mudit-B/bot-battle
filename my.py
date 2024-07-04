@@ -257,7 +257,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                 # Check if we have at least twice the number of troops compared to the target
                 if (game.state.territories[candidate_attacker].troops - game.state.territories[candidate_target].troops >= 2 and 
                  game.state.territories[candidate_attacker].troops > 1):
-                    return game.move_attack(query, candidate_attacker, candidate_target, min(3, game.state.territories[candidate_attacker].troops - 1))
+                    return game.move_attack(query, candidate_attacker, candidate_target, game.state.territories[candidate_attacker].troops - 1)
 
     if len(game.state.recording) < 4000:
         # We will check if anyone attacked us in the last round.
