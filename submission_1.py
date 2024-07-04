@@ -128,6 +128,7 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
                 break
         if continent == target_continent:
             value += 3
+        print(territory, continent, target_continent, flush=True)
         # 1% this too hit and trial this.
         value += 0.5 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
         return value
@@ -220,20 +221,9 @@ def handle_distribute_troops(game: Game, bot_state: BotState, query: QueryDistri
     continents = game.state.map.get_continents()
     my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
 
-    # the percentage of each continent controlled by us, (0.xx, left)
-    continent_control = {}
-    for continent, territories in continents.items():
-        owned = len(set(territories) & set(my_territories))
-        total = len(territories)
-        continent_control[continent] = (owned / total, total - owned)
-
-    for continent in continent_control:
-        if continent_control[continent][0] == 1:
-            # don't choose this
-            continent_control[continent] = (-1, -1)
-
-    # continents closest to getting captured by us
-    target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
+    # this gets the target continent.
+    bot_state.update_target_continent(game)
+    target_continent = bot_state.target_continent
 
     def eval_terr(territory):
         # like chess we eval the val of this territory
