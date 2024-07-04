@@ -1,1 +1,1 @@
-{"result_type":"CRASHED","reason":"Game engine crashed."}
+{"result_type":"CANCELLED","reason":"Game exceeded maximum recording (recording was 15030 records long)."}

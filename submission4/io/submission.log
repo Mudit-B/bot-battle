@@ -1,6 +1,0 @@
-my territories ['ONTARIO', 'QUEBEC', 'SOUTHERN_EUROPE', 'AFGHANISTAN', 'INDIA', 'SIBERIA', 'URAL', 'MADAGASCAR']
-bordering enemies ['IRKUTSK', 'EASTERN_US', 'UKRAINE']
-adjacent to target ['KAMCHATKA', 'YAKUTSK', 'SIBERIA', 'MONGOLIA']
-my territories ['QUEBEC']
-bordering enemies ['EASTERN_US', 'GREENLAND', 'ONTARIO']
-adjacent to target ['QUEBEC', 'ONTARIO', 'WESTERN_US', 'CENTRAL_AMERICA']

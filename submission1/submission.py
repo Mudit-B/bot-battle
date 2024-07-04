@@ -84,6 +84,13 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
     my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
     adjacent_territories = game.state.get_all_adjacent_territories(my_territories)
     available = list(set(unclaimed_territories) & set(adjacent_territories))
+    print(available)
+    # if 32 in unclaimed_territories and not available:
+    #     return game.move_claim_territory(query, 32)
+    # elif not available:
+    #     for territory in [38, 39, 40, 41]:
+    #         if territory in unclaimed_territories:
+    #             return game.move_claim_territory(query, territory)
     
     '''
     Idea is to claim the territories that are closer to the capturing a whole island / continent
@@ -117,7 +124,7 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
         if continent == target_continent:
             value += 3
         # 1% this too hit and trial this.
-        value += 0.5 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
+        value += 2 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
         return value
 
     def find_best_territory(lst):
@@ -256,7 +263,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
             for candidate_attacker in candidate_attackers:
                 # Check if we have at least twice the number of troops compared to the target
                 if (game.state.territories[candidate_attacker].troops - game.state.territories[candidate_target].troops >= 2 and 
-                 game.state.territories[candidate_attacker].troops > 1):
+                 game.state.territories[candidate_attacker].troops > 4):
                     return game.move_attack(query, candidate_attacker, candidate_target, min(3, game.state.territories[candidate_attacker].troops - 1))
 
     if len(game.state.recording) < 4000:
