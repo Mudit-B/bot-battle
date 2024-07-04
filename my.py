@@ -84,7 +84,7 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
     my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
     adjacent_territories = game.state.get_all_adjacent_territories(my_territories)
     available = list(set(unclaimed_territories) & set(adjacent_territories))
-    print(available)
+    # print(available)
     # if 32 in unclaimed_territories and not available:
     #     return game.move_claim_territory(query, 32)
     # elif not available:
