@@ -30,8 +30,30 @@ from risk_shared.records.types.move_type import MoveType
 class BotState():
     def __init__(self):
         self.enemy: Optional[int] = None
+        self.target_continent = None
 
+    def update_target_continent(self, game: Game):
+        """Update the target continent based on the current game state."""
+        continents = game.state.map.get_continents()
+        my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
 
+        # Calculate the percentage of each continent controlled by us
+        continent_control = {}
+        for continent, territories in continents.items():
+            owned = len(set(territories) & set(my_territories))
+            total = len(territories)
+            continent_control[continent] = (owned / total, total - owned)
+
+        for continent in continent_control:
+            if continent_control[continent][0] == 1:
+                # Don't choose this continent if it's already fully controlled
+                continent_control[continent] = (-1, -1)
+
+        # Determine the continent closest to being captured by us
+        self.target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
+
+        # Log the target continent for debugging purposes
+        print(f"Updated target continent: {self.target_continent}", flush=True)
 def main():
     
     # Get the game object, which will connect you to the engine and
@@ -88,22 +110,12 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
     '''
     Idea is to claim the territories that are closer to the capturing a whole island / continent
     '''
+    # continents closest to getting captured by us
     continents = game.state.map.get_continents()
     
-    # the percentage of each continent controlled by us, (0.xx, left)
-    continent_control = {}
-    for continent, territories in continents.items():
-        owned = len(set(territories) & set(my_territories))
-        total = len(territories)
-        continent_control[continent] = (owned / total, total - owned)
-    
-    for continent in continent_control:
-        if continent_control[continent][0] == 1:
-            # dont choose this
-            continent_control[continent] = (-1, - 1) 
-
-    # continents closest to getting captured by us
-    target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
+    # this gets the target continent.
+    bot_state.update_target_continent(game)
+    target_continent = bot_state.target_continent
     
     def eval_terr(territory):
         # like chess we eval the val of this territory

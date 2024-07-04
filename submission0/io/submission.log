@@ -1,1129 +1,838 @@
-0
-0
-0
-0
-0
-12.0
-0
-11.0
-0
-10.0
-0
-9.0
-0
-8.0
-0
-7.0
-0
-6.0
-0
-5.0
-0
-0
-0
-0
-0
-7.0
-0
-0
-9.0
-0
-8.0
-0
-7.0
-0
-0
-0
-10.0
-0
-9.0
-0
-8.0
-0
-7.0
-0
-0
-6.0
-0
-5.0
-0
-0
-0
-3.5
-0
-3.0
-0
-0
-20.0
-0
-19.0
-0
-18.0
-0
-17.0
-0
-16.0
-0
-7.5
-0
-14.0
-0
-0
-13.0
-0
-12.0
-0
-0
-13.0
-0
-12.0
-0
-11.0
-0
-11.0
-0
-10.0
-0
-10.0
-0
-9.0
-0
-9.0
-0
-8.0
-0
-8.0
-0
-7.0
-0
-7.0
-0
-0
-8.0
-0
-7.0
-0
-6.0
-0
-6.0
-0
-6.0
-0
-5.0
-0
-5.0
-0
-0
-0
-8.6
-0
-14.333333333333334
-0
-13.666666666666666
-0
-13.0
-0
-39.0
-0
-38.0
-0
-37.0
-0
-7.2
-0
-6.8
-0
-11.333333333333334
-0
-34.0
-0
-5.0
-0
-2.5384615384615383
-0
-0
-2.1333333333333333
-0
-2.4615384615384617
-0
-0
-0
-4.2
-0
-7.0
-0
-0
-31.0
-0
-26.0
-0
-25.0
-0
-0
-3.28125
-0
-3.5
-0
-3.75
-0
-4.038461538461538
-0
-4.16
-0
-4.521739130434782
-0
-4.681818181818182
-0
-5.15
-0
-5.368421052631579
-0
-5.2631578947368425
-0
-0
-5.25
-0
-0
-4.954545454545454
-0
-0
-18.666666666666668
-0
-28.0
-0
-0
-58.5
-0
-57.5
-0
-56.5
-0
-112.0
-0
-111.0
-0
-110.0
-0
-109.0
-0
-108.0
-0
-10.7
-0
-10.5
-0
-13.125
-0
-0
-0
-105.0
-0
-0
-34.0
-0
-8.666666666666666
-0
-0
-0
-104.0
-0
-10.3
-0
-10.1
-0
-11.11111111111111
-0
-14.285714285714286
-0
-16.5
-0
-0
-99.0
-0
-24.5
-0
-49.0
-0
-97.0
-0
-5.55
-0
-6.166666666666667
-0
-6.9375
-0
-6.8125
-0
-7.785714285714286
-0
-8.307692307692308
-0
-8.153846153846153
-0
-9.636363636363637
-0
-10.5
-0
-11.555555555555555
-0
-0
-0
-96.0
-0
-95.0
-0
-94.0
-0
-93.0
-0
-13.5
-0
-15.285714285714286
-0
-17.666666666666668
-0
-0
-92.0
-0
-13.105263157894736
-0
-13.777777777777779
-0
-15.5
-0
-15.375
-0
-17.571428571428573
-0
-0
-91.0
-0
-90.0
-0
-33.0
-0
-17.642857142857142
-0
-20.583333333333332
-0
-22.363636363636363
-0
-24.5
-0
-30.625
-0
-40.833333333333336
-0
-48.8
-0
-81.33333333333333
-0
-0
-0
-250.0
-0
-32.0
-0
-5.659090909090909
-0
-5.928571428571429
-0
-405.0
-404.0
-403.0
-402.0
-401.0
-400.0
-399.0
-398.0
-397.0
-396.0
-395.0
-394.0
-393.0
-392.0
-391.0
-390.0
-389.0
-388.0
-387.0
-386.0
-385.0
-384.0
-383.0
-382.0
-381.0
-380.0
-379.0
-378.0
-377.0
-376.0
-375.0
-23.375
-26.714285714285715
-26.571428571428573
-31.0
-33.72727272727273
-33.54545454545455
-41.0
-46.0
-61.333333333333336
-61.0
-91.5
-91.0
-121.0
-181.0
-180.0
-359.0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-245.0
-244.0
-243.0
-242.0
-241.0
-240.0
-239.0
-238.0
-237.0
-236.0
-235.0
-0
-32.0
-0
-31.0
-0
-30.0
-0
-29.0
-0
-28.0
-0
-27.0
-0
-26.0
-0
-25.0
-0
-24.0
-0
-23.0
-0
-22.0
-0
-21.0
-0
-20.0
-0
-19.0
-0
-18.0
-0
-17.0
-0
-16.0
-0
-15.0
-0
-14.0
-0
-13.0
-0
-12.0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-237.0
-236.0
-235.0
-234.0
-233.0
-1.406060606060606
-1.393939393939394
-1.4110429447852761
-1.4285714285714286
-1.4465408805031446
-1.464968152866242
-1.4838709677419355
-1.5032679738562091
-1.4901960784313726
-1.509933774834437
-1.5302013422818792
-1.5510204081632653
-1.5724137931034483
-1.5763888888888888
-1.5985915492957747
-1.5845070422535212
-1.6071428571428572
-1.6304347826086956
-1.6544117647058822
-1.6592592592592592
-1.664179104477612
-1.6492537313432836
-1.6541353383458646
-1.6793893129770991
-1.7054263565891472
-1.7322834645669292
-1.7165354330708662
-1.7222222222222223
-1.75
-1.7338709677419355
-1.7622950819672132
-1.7916666666666667
-1.775
-1.7583333333333333
-1.7647058823529411
-1.771186440677966
-1.8017241379310345
-1.808695652173913
-1.791304347826087
-1.823008849557522
-1.8303571428571428
-1.8636363636363635
-1.8454545454545455
-1.8272727272727274
-1.8611111111111112
-1.8962264150943395
-1.8773584905660377
-1.8857142857142857
-1.8666666666666667
-1.8476190476190477
-1.883495145631068
-1.8640776699029127
-1.900990099009901
-1.91
-1.9489795918367347
-1.9895833333333333
-2.0
-2.0106382978723403
-2.021505376344086
-2.0
-1.978494623655914
-2.021978021978022
-2.033333333333333
-2.0795454545454546
-2.0568181818181817
-2.0689655172413794
-2.1176470588235294
-2.0941176470588236
-2.070588235294118
-2.1204819277108435
-2.1341463414634148
-2.1875
-2.2025316455696204
-2.217948717948718
-2.276315789473684
-2.3378378378378377
-2.356164383561644
-2.375
-2.3472222222222223
-2.3661971830985915
-2.3857142857142857
-2.4558823529411766
-2.5303030303030303
-2.609375
-2.578125
-2.6031746031746033
-2.629032258064516
-2.596774193548387
-2.622950819672131
-2.711864406779661
-2.807017543859649
-2.8392857142857144
-2.8727272727272726
-2.9074074074074074
-2.8703703703703702
-2.9056603773584904
-2.9423076923076925
-2.980392156862745
-3.1020408163265305
-3.234042553191489
-3.3777777777777778
-3.3333333333333335
-3.3863636363636362
-3.5476190476190474
-3.6097560975609757
-3.675
-3.8684210526315788
-4.083333333333333
-4.323529411764706
-4.264705882352941
-4.205882352941177
-4.46875
-4.766666666666667
-5.107142857142857
-5.035714285714286
-5.185185185185185
-5.111111111111111
-5.52
-6.0
-6.571428571428571
-6.85
-7.611111111111111
-8.0
-8.4375
-8.933333333333334
-10.307692307692308
-10.153846153846153
-10.0
-11.818181818181818
-12.9
-12.7
-14.0
-18.0
-25.2
-42.0
-41.333333333333336
-124.0
-123.0
-0
-0
-0
-0
-0
-0
-0
-189.0
-188.0
-187.0
-186.0
-185.0
-184.0
-183.0
-182.0
-181.0
-180.0
-179.0
-178.0
-177.0
-176.0
-175.0
-174.0
-173.0
-172.0
-171.0
-170.0
-169.0
-168.0
-167.0
-166.0
-165.0
-164.0
-163.0
-162.0
-161.0
-160.0
-159.0
-158.0
-157.0
-1.3109243697478992
-1.3333333333333333
-1.3162393162393162
-1.3391304347826087
-1.3217391304347825
-1.3245614035087718
-1.3274336283185841
-1.3097345132743363
-1.3333333333333333
-1.3577981651376148
-1.3394495412844036
-1.3211009174311927
-1.3240740740740742
-1.349056603773585
-1.330188679245283
-1.3557692307692308
-1.3592233009708738
-1.3398058252427185
-1.3431372549019607
-1.37
-1.3979591836734695
-1.402061855670103
-1.40625
-1.3854166666666667
-1.3645833333333333
-1.3936170212765957
-1.3978494623655915
-1.4285714285714286
-1.4333333333333333
-1.4111111111111112
-1.3888888888888888
-1.3932584269662922
-1.3977272727272727
-1.4022988505747127
-1.4069767441860466
-1.411764705882353
-1.388235294117647
-1.4216867469879517
-1.3975903614457832
-1.4320987654320987
-1.4375
-1.4430379746835442
-1.4805194805194806
-1.4545454545454546
-1.4605263157894737
-1.5
-1.5068493150684932
-1.5492957746478873
-1.5211267605633803
-1.565217391304348
-1.536231884057971
-1.5441176470588236
-1.5522388059701493
-1.6
-1.5692307692307692
-1.578125
-1.5873015873015872
-1.5555555555555556
-1.6065573770491803
-1.6166666666666667
-1.6724137931034482
-1.7321428571428572
-1.7962962962962963
-1.8113207547169812
-1.7735849056603774
-1.8431372549019607
-1.9183673469387754
-1.9375
-2.0217391304347827
-2.1136363636363638
-2.2142857142857144
-2.325
-2.358974358974359
-2.4864864864864864
-2.6285714285714286
-2.787878787878788
-2.967741935483871
-3.1724137931034484
-3.25
-3.1785714285714284
-3.423076923076923
-3.52
-3.8260869565217392
-3.9545454545454546
-4.35
-4.833333333333333
-5.0588235294117645
-4.9411764705882355
-5.1875
-5.0625
-5.333333333333333
-5.2
-5.5
-6.416666666666667
-6.909090909090909
-6.7272727272727275
-6.545454545454546
-7.1
-6.9
-8.625
-11.5
-13.6
-22.666666666666668
-33.5
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-52.0
-51.0
-50.0
-49.0
-48.0
-47.0
-0
-5.0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-46.0
-45.0
-44.0
-43.0
-42.0
-41.0
-0
-0
-0
-0
-0
-0
-0
-0
-7.0
-6.0
-5.0
-0
-0
-0
-0
-0
-7.0
-6.0
-5.0
-0
-0
-0
-0
-0
-219.0
-218.0
-217.0
-216.0
-215.0
-214.0
-213.0
-212.0
-211.0
-210.0
-1.0145631067961165
-1.0146341463414634
-1.0246305418719213
-1.0247524752475248
-1.035
-1.0454545454545454
-1.0561224489795917
-1.0670103092783505
-1.078125
-1.0894736842105264
-1.08994708994709
-1.0904255319148937
-1.0797872340425532
-1.0913978494623655
-1.0806451612903225
-1.0923913043478262
-1.1043956043956045
-1.1049723756906078
-1.1055555555555556
-1.106145251396648
-1.094972067039106
-1.0837988826815643
-1.0842696629213484
-1.0965909090909092
-1.1091954022988506
-1.1098265895953756
-1.1228070175438596
-1.136094674556213
-1.1242603550295858
-1.1377245508982037
-1.1515151515151516
-1.1393939393939394
-1.1272727272727272
-1.1411042944785277
-1.15527950310559
-1.15625
-1.14375
-1.1582278481012658
-1.1455696202531647
-1.1602564102564104
-1.1474358974358974
-1.1346153846153846
-1.1493506493506493
-1.1644736842105263
-1.1513157894736843
-1.1523178807947019
-1.1533333333333333
-1.1689189189189189
-1.1849315068493151
-1.1712328767123288
-1.1875
-1.204225352112676
-1.1901408450704225
-1.176056338028169
-1.1619718309859155
-1.1785714285714286
-1.1642857142857144
-1.15
-1.1510791366906474
-1.1366906474820144
-1.1376811594202898
-1.1386861313868613
-1.1555555555555554
-1.1567164179104477
-1.1578947368421053
-1.1428571428571428
-1.1278195488721805
-1.128787878787879
-1.1136363636363635
-1.0984848484848484
-1.099236641221374
-1.083969465648855
-1.0846153846153845
-1.1015625
-1.119047619047619
-1.1370967741935485
-1.1382113821138211
-1.139344262295082
-1.1583333333333334
-1.1596638655462186
-1.1428571428571428
-1.1440677966101696
-1.1452991452991452
-1.1282051282051282
-1.1293103448275863
-1.1304347826086956
-1.131578947368421
-1.1327433628318584
-1.1150442477876106
-1.135135135135135
-1.1559633027522935
-1.1376146788990826
-1.1192660550458715
-1.1203703703703705
-1.1018518518518519
-1.0833333333333333
-1.1037735849056605
-1.0849056603773586
-1.1057692307692308
-1.0865384615384615
-1.087378640776699
-1.0679611650485437
-1.0686274509803921
-1.0490196078431373
-1.0495049504950495
-1.0707070707070707
-1.092783505154639
-1.0721649484536082
-1.0947368421052632
-1.0736842105263158
-1.074468085106383
-1.0978260869565217
-1.1222222222222222
-1.1
-1.101123595505618
-1.1264367816091954
-1.1529411764705881
-1.1294117647058823
-1.1058823529411765
-1.0823529411764705
-1.0833333333333333
-1.0843373493975903
-1.1111111111111112
-1.1125
-1.1139240506329113
-1.0886075949367089
-1.1168831168831168
-1.0909090909090908
-1.0649350649350648
-1.0657894736842106
-1.0394736842105263
-1.0675675675675675
-1.0972222222222223
-1.1285714285714286
-1.161764705882353
-1.196969696969697
-1.2
-1.2380952380952381
-1.278688524590164
-1.2459016393442623
-1.2881355932203389
-1.293103448275862
-1.2586206896551724
-1.3035714285714286
-1.309090909090909
-1.3584905660377358
-1.411764705882353
-1.469387755102041
-1.5319148936170213
-1.4893617021276595
-1.446808510638298
-1.4042553191489362
-1.4666666666666666
-1.5348837209302326
-1.5476190476190477
-1.5
-1.4523809523809523
-1.525
-1.5384615384615385
-1.6216216216216217
-1.7142857142857142
-1.6571428571428573
-1.6764705882352942
-1.6176470588235294
-1.5588235294117647
-1.65625
-1.7666666666666666
-1.8928571428571428
-1.9259259259259258
-1.8518518518518519
-2.0
-2.0416666666666665
-1.9583333333333333
-1.875
-2.0454545454545454
-2.0952380952380953
-2.3157894736842106
-2.588235294117647
-2.6875
-2.5625
-2.4375
-2.7857142857142856
-2.642857142857143
-2.769230769230769
-2.9166666666666665
-3.5
-3.3
-3.1
-2.9
-3.625
-4.833333333333333
-7.25
-6.75
-13.5
-12.5
-11.5
-10.5
-6.666666666666667
-9.5
-8.5
-16.0
-15.0
-14.0
-13.0
-12.0
-11.0
-10.0
-9.0
-8.0
-7.0
-6.0
-5.0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-6.0
-5.0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-7.0
-6.0
-5.0
-0
-0
-0
-244.0
-243.0
-242.0
-241.0
-240.0
-79.66666666666667
-239.0
-238.0
-237.0
-236.0
-235.0
-234.0
-233.0
-232.0
-231.0
-230.0
-229.0
-228.0
-227.0
-226.0
-225.0
-224.0
-223.0
-222.0
-221.0
+Updated target continent: 3
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 0
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 3
+Updated target continent: 3
+Updated target continent: 3
+Updated target continent: 3
+Updated target continent: 3
+Updated target continent: 0
+Updated target continent: 1
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 2
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 3
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 0
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 4
+Updated target continent: 4
+Updated target continent: 4
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 5
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 0
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 1
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 0
+Updated target continent: 0
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 3
+Updated target continent: 3
+Updated target continent: 1
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 2
+Updated target continent: 5
