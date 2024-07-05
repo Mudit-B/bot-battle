@@ -210,7 +210,7 @@ def handle_distribute_troops(game: Game, bot_state: BotState, query: QueryDistri
         if continent == target_continent:
             value += 100
         # 1% this too hit and trial this.
-        value += 0.5 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
+        value += len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
         return value
 
     def find_best_territory(lst):

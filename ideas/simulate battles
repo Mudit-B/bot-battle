@@ -1,0 +1,40 @@
+
+    def simulate_fight(attacking_troops: int, defending_troops: int):
+        if attacking_troops > 3:
+            attacking_troops = 3
+        if defending_troops > 2:
+            defending_troops = 2
+        def roll():
+            return random.randint(1, 6)
+        attacking_rolls = sorted([roll() for _ in range(attacking_troops)])
+        defending_rolls = sorted([roll() for _ in range(defending_troops)])
+        battles_won_by_attacker = [attacking_rolls.pop(-1) > defending_rolls.pop(-1) for _ in range(min(attacking_troops, defending_troops))]
+
+        attacking_troops_lost = battles_won_by_attacker.count(False)
+        defending_troops_lost = battles_won_by_attacker.count(True)
+
+        attacking_troops -= attacking_troops_lost
+        defending_troops -= defending_troops_lost
+
+        return attacking_troops, defending_troops
+
+    """
+    Simulate the battle between attacker and defender
+    Returns the winrate
+    """
+    def simulate_battle(attack_troops: int, defender_troops: int, n: int) -> float:
+        attacker_wins = 0
+        defender_wins = 0
+
+        for i in range(n):
+            a, b = attack_troops, defender_troops 
+
+            attack_troops, defender_troops  = simulate_fight(attack_troops, defender_troops)
+            
+            if defender_troops < b:
+                attacker_wins += 1
+            if attack_troops < a:
+                defender_wins += 1
+            
+            attack_troops, defender_troops = a, b
+        return (attacker_wins / n)
