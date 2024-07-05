@@ -120,7 +120,20 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
     
     # Or if there are no such territories, we will pick just an unclaimed one with the greatest degree.
     else:
-        selected_territory = sorted(unclaimed_territories, key=lambda x: len(game.state.map.get_adjacent_to(x)), reverse=True)[0]
+        # Try not to claim europe and asia coz why try its useless.
+        all_territories = set(range(0, 42))
+
+        europe_territories = {9, 10, 11, 12, 13}
+        asia_territories = {14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}
+
+        # Exclude Europe and Asia territories
+        world_except_europe_asia = all_territories - europe_territories - asia_territories
+        optimal_choices = world_except_europe_asia & set(unclaimed_territories)
+        if optimal_choices:
+            selected_territory = random.choice(list(optimal_choices))
+        else:
+            selected_territory = sorted(unclaimed_territories, key=lambda x: len(game.state.map.get_adjacent_to(x)), reverse=True)[0]
+        print(selected_territory, flush=True)
 
     return game.move_claim_territory(query, selected_territory)
 
@@ -334,33 +347,50 @@ def handle_defend(game: Game, bot_state: BotState, query: QueryDefend) -> MoveDe
 def handle_fortify(game: Game, bot_state: BotState, query: QueryFortify) -> Union[MoveFortify, MoveFortifyPass]:
     """At the end of your turn, after you have finished attacking, you may move a number of troops between
     any two of your territories (they must be adjacent)."""
-
-
-    # We will always fortify towards the most powerful player (player with most troops on the map) to defend against them.
-    my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
-    total_troops_per_player = {}
-    for player in game.state.players.values():
-        total_troops_per_player[player.player_id] = sum([game.state.territories[x].troops for x in game.state.get_territories_owned_by(player.player_id)])
-
-    most_powerful_players = sorted(total_troops_per_player.items(), key=lambda x: x[1])
-    most_powerful_player = most_powerful_players[0][0]
-    # If we are the most powerful, we will pass.
-    if most_powerful_player == game.state.me.player_id:
-        most_powerful_player = most_powerful_players[1][0]
     
-    # Otherwise we will find the shortest path between our territory with the most troops
-    # and any of the most powerful player's territories and fortify along that path.
-    candidate_territories = game.state.get_all_border_territories(my_territories)
-    most_troops_territory = max(candidate_territories, key=lambda x: game.state.territories[x].troops)
+    """
+    Previous function was really suboptimal i think?
+    Idea is to find max threat
+    This implementation tries to find the bordering territories 
+    """
+    my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
+    border_territories = game.state.get_all_border_territories(my_territories)
 
-    # To find the shortest path, we will use a custom function.
-    shortest_path = find_shortest_path_from_vertex_to_set(game, most_troops_territory, set(game.state.get_territories_owned_by(most_powerful_player)))
-    # We will move our troops along this path (we can only move one step, and we have to leave one troop behind).
-    # We have to check that we can move any troops though, if we can't then we will pass our turn.
-    if len(shortest_path) > 0 and game.state.territories[most_troops_territory].troops > 1:
-        return game.move_fortify(query, shortest_path[0], shortest_path[1], game.state.territories[most_troops_territory].troops - 1)
+    # max troops to move to the best move
+    max_troops = 0
+    # tuple used to store best move state to be extracted later
+    best_move = None
+
+    # check all our territories for the optimal strat
+    for territory in my_territories:
+        # Cant really move if 1 troop
+        if game.state.territories[territory].troops <= 1:
+            continue
+        
+        # Check the neighbors of the current territory
+        for neighbor in game.state.map.get_adjacent_to(territory):
+
+            # obv we can only fortify our territories
+            if neighbor in my_territories:
+                if game.state.territories[neighbor].troops < max_troops:
+                    continue
+
+                # if neighbor is a border territory
+                if neighbor in border_territories:
+                    # calc the troops that can be moved, we move fortify max 
+                    move_troops = game.state.territories[territory].troops - 1
+                    if move_troops > max_troops:
+                        max_troops = move_troops
+                        best_move = (territory, neighbor, move_troops)
+
+    # execute the best move if we have one
+    if best_move:
+        from_territory, to_territory, troops = best_move
+        return game.move_fortify(query, from_territory, to_territory, troops)
     else:
+        # otherwise, pass the fortify move
         return game.move_fortify_pass(query)
+
 
 
 def find_shortest_path_from_vertex_to_set(game: Game, source: int, target_set: set[int]) -> list[int]:
