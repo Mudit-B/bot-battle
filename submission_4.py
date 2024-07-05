@@ -191,37 +191,49 @@ def handle_distribute_troops(game: Game, bot_state: BotState, query: QueryDistri
         distributions[game.state.me.must_place_territory_bonus[0]] += 2
         total_troops -= 2
 
+    # Prioritize capturing whole continents
+    continents = game.state.map.get_continents()
+    my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
 
-    # We will equally distribute across border territories in the early game,
-    # but start doomstacking in the late game.
-    if len(game.state.recording) < 4000:
-        troops_per_territory = total_troops // len(border_territories)
-        leftover_troops = total_troops % len(border_territories)
-        for territory in border_territories:
-            distributions[territory] += troops_per_territory
-    
-        # The leftover troops will be put some territory (we don't care)
-        distributions[border_territories[0]] += leftover_troops
-    
-    else:
-        my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
-        weakest_players = sorted(game.state.players.values(), key=lambda x: sum(
-            [game.state.territories[y].troops for y in game.state.get_territories_owned_by(x.player_id)]
-        ))
+    # this gets the target continent.
+    bot_state.update_target_continent(game)
+    target_continent = bot_state.target_continent
 
-        for player in weakest_players:
-            bordering_enemy_territories = set(game.state.get_all_adjacent_territories(my_territories)) & set(game.state.get_territories_owned_by(player.player_id))
-            if len(bordering_enemy_territories) > 0:
-                print("my territories", [game.state.map.get_vertex_name(x) for x in my_territories])
-                print("bordering enemies", [game.state.map.get_vertex_name(x) for x in bordering_enemy_territories])
-                print("adjacent to target", [game.state.map.get_vertex_name(x) for x in game.state.map.get_adjacent_to(list(bordering_enemy_territories)[0])])
-                selected_territory = list(set(game.state.map.get_adjacent_to(list(bordering_enemy_territories)[0])) & set(my_territories))[0]
-                distributions[selected_territory] += total_troops
+    def eval_terr(territory):
+        # like chess we eval the val of this territory
+        value = 0
+        continent = None
+        for k, territories in continents.items():
+            if territory in territories:
+                continent = k
                 break
+        if continent == target_continent:
+            value += 100
+        # 1% this too hit and trial this.
+        value += 0.5 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
+        return value
 
+    def find_best_territory(lst):
+        selected_territory = None
+        for territory in lst:
+            if selected_territory is None:
+                selected_territory = territory
+            else:
+                if eval_terr(territory) > eval_terr(selected_territory):
+                    selected_territory = territory
+        return selected_territory
+
+    # Find the best border territory to distribute troops
+    best_border_territory = find_best_territory(border_territories)
+
+    if best_border_territory:
+        distributions[best_border_territory] += total_troops
+    else:
+        # If no specific border territory is found, distribute the maximum number of troops to the territory with the highest attack potential
+        max_attack_territory = max(border_territories, key=lambda x: game.state.territories[x].troops)
+        distributions[max_attack_territory] += total_troops
 
     return game.move_distribute_troops(query, distributions)
-
 
 def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[MoveAttack, MoveAttackPass]:
     """After the troop phase of your turn, you may attack any number of times until you decide to
@@ -330,11 +342,11 @@ def handle_fortify(game: Game, bot_state: BotState, query: QueryFortify) -> Unio
     for player in game.state.players.values():
         total_troops_per_player[player.player_id] = sum([game.state.territories[x].troops for x in game.state.get_territories_owned_by(player.player_id)])
 
-    most_powerful_player = max(total_troops_per_player.items(), key=lambda x: x[1])[0]
-
+    most_powerful_players = sorted(total_troops_per_player.items(), key=lambda x: x[1])
+    most_powerful_player = most_powerful_players[0][0]
     # If we are the most powerful, we will pass.
     if most_powerful_player == game.state.me.player_id:
-        return game.move_fortify_pass(query)
+        most_powerful_player = most_powerful_players[1][0]
     
     # Otherwise we will find the shortest path between our territory with the most troops
     # and any of the most powerful player's territories and fortify along that path.
