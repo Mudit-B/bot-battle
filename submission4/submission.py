@@ -52,8 +52,6 @@ class BotState():
         # Determine the continent closest to being captured by us
         self.target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
 
-        # Log the target continent for debugging purposes
-        print(f"Updated target continent: {self.target_continent}", flush=True)
     
 def main():
     
@@ -275,7 +273,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                 probability = attacker_troops / target_troops if target_troops > 0 else float('inf')
 
                 # Determine if this is a favorable attack
-                is_favorable_attack = (attacker_troops - target_troops >= 2) and (attacker_troops > 4)
+                is_favorable_attack = (attacker_troops - target_troops >= 3) and (attacker_troops > 4)
                 if is_favorable_attack and probability > best_probability:
                     best_probability = probability
                     best_move = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
@@ -291,27 +289,17 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                     target_territories.append(territory)
         return target_territories
 
-    if len(game.state.recording) < 4000:
-        # get the territories in the target continent
-        target_territories = find_best_target_continent(bordering_territories)
+    target_territories = find_best_target_continent(bordering_territories)
 
-        # We will attack the target territory with the highest probability of success if possible.
-        move = attack_highest_probability(target_territories)
-        if move:
-            return move
+    # We will attack the target territory with the highest probability of success if possible.
+    move = attack_highest_probability(target_territories)
+    if move:
+        return move
 
-        # Otherwise, attack any bordering territory with the highest probability of success.
-        move = attack_highest_probability(bordering_territories)
-        if move:
-            return move
-
-    # In the late game, attack anyone adjacent to our strongest territories (hopefully our doomstack).
-    else:
-        strongest_territories = sorted(my_territories, key=lambda x: game.state.territories[x].troops, reverse=True)
-        for territory in strongest_territories:
-            move = attack_highest_probability(list(set(game.state.map.get_adjacent_to(territory)) - set(my_territories)))
-            if move:
-                return move
+    # Otherwise, attack any bordering territory with the highest probability of success.
+    move = attack_highest_probability(bordering_territories)
+    if move:
+        return move
 
     return game.move_attack_pass(query)
 
