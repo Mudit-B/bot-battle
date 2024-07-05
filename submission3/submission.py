@@ -52,8 +52,6 @@ class BotState():
         # Determine the continent closest to being captured by us
         self.target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
 
-        # Log the target continent for debugging purposes
-        print(f"Updated target continent: {self.target_continent}", flush=True)
     
 def main():
     
@@ -97,57 +95,33 @@ def main():
         
         # Send the move to the engine.
         game.send_move(choose_move(query))
-
+ 
 def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTerritory) -> MoveClaimTerritory:
-    """At the start of the game, you can claim a single unclaimed territory every turn
+    """At the start of the game, you can claim a single unclaimed territory every turn 
     until all the territories have been claimed by players."""
-    
+
     unclaimed_territories = game.state.get_territories_owned_by(None)
     my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
+
+    # We will try to always pick new territories that are next to ones that we own,
+    # or a random one if that isn't possible.
     adjacent_territories = game.state.get_all_adjacent_territories(my_territories)
 
+    # We can only pick from territories that are unclaimed and adjacent to us.
     available = list(set(unclaimed_territories) & set(adjacent_territories))
+    if len(available) != 0:
 
-    '''
-    Idea is to claim the territories that are closer to the capturing a whole island / continent
-    '''
-    # continents closest to getting captured by us
-    continents = game.state.map.get_continents()
+        # We will pick the one with the most connections to our territories
+        # this should make our territories clustered together a little bit.
+        def count_adjacent_friendly(x: int) -> int:
+            return len(set(my_territories) & set(game.state.map.get_adjacent_to(x)))
+
+        selected_territory = sorted(available, key=lambda x: count_adjacent_friendly(x), reverse=True)[0]
     
-    # this gets the target continent.
-    bot_state.update_target_continent(game)
-    target_continent = bot_state.target_continent
-    
-    def eval_terr(territory):
-        # like chess we eval the val of this territory
-        value = 0
-        continent = None
-        for k, territories in continents.items():
-            if territory in territories:
-                continent = continents[k]
-                break
-        if continent == target_continent:
-            value += 3
-        print(territory, continent, target_continent, flush=True)
-        # 1% this too hit and trial this.
-        value += 0.5 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
-        return value
-
-    def find_best_territory(lst):
-        selected_territory = None
-        for territory in lst:
-            if selected_territory == None:
-                selected_territory = territory
-            else:
-                if eval_terr(territory) > eval_terr(selected_territory):
-                    selected_territory = territory
-        return selected_territory
-
-    selected_territory = None
-    if available:
-        selected_territory = find_best_territory(available)
-    if not selected_territory:
+    # Or if there are no such territories, we will pick just an unclaimed one with the greatest degree.
+    else:
         selected_territory = sorted(unclaimed_territories, key=lambda x: len(game.state.map.get_adjacent_to(x)), reverse=True)[0]
+
     return game.move_claim_territory(query, selected_territory)
 
 def handle_place_initial_troop(game: Game, bot_state: BotState, query: QueryPlaceInitialTroop) -> MovePlaceInitialTroop:
@@ -299,7 +273,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                 probability = attacker_troops / target_troops if target_troops > 0 else float('inf')
 
                 # Determine if this is a favorable attack
-                is_favorable_attack = (attacker_troops - target_troops >= 2) and (attacker_troops > 4)
+                is_favorable_attack = (attacker_troops - target_troops >= 3) and (attacker_troops > 4)
                 if is_favorable_attack and probability > best_probability:
                     best_probability = probability
                     best_move = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
@@ -315,27 +289,17 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                     target_territories.append(territory)
         return target_territories
 
-    if len(game.state.recording) < 4000:
-        # get the territories in the target continent
-        target_territories = find_best_target_continent(bordering_territories)
+    target_territories = find_best_target_continent(bordering_territories)
 
-        # We will attack the target territory with the highest probability of success if possible.
-        move = attack_highest_probability(target_territories)
-        if move:
-            return move
+    # We will attack the target territory with the highest probability of success if possible.
+    move = attack_highest_probability(target_territories)
+    if move:
+        return move
 
-        # Otherwise, attack any bordering territory with the highest probability of success.
-        move = attack_highest_probability(bordering_territories)
-        if move:
-            return move
-
-    # In the late game, attack anyone adjacent to our strongest territories (hopefully our doomstack).
-    else:
-        strongest_territories = sorted(my_territories, key=lambda x: game.state.territories[x].troops, reverse=True)
-        for territory in strongest_territories:
-            move = attack_highest_probability(list(set(game.state.map.get_adjacent_to(territory)) - set(my_territories)))
-            if move:
-                return move
+    # Otherwise, attack any bordering territory with the highest probability of success.
+    move = attack_highest_probability(bordering_territories)
+    if move:
+        return move
 
     return game.move_attack_pass(query)
 
