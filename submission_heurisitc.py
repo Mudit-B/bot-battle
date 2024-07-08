@@ -52,7 +52,23 @@ class BotState():
         # Determine the continent closest to being captured by us
         self.target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
 
-    
+    def heuristic(self, game):
+        """Get a heuristic value for the current game state for implementing minimax"""
+        evaluation = 0
+        my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
+
+        # We will place troops along the territories on our border.
+        border_territories = game.state.get_all_border_territories(
+            game.state.get_territories_owned_by(game.state.me.player_id)
+        )
+
+        bordering_territories = game.state.get_all_adjacent_territories(border_territories)
+        enemy_territories = set(bordering_territories) - set(my_territories)
+
+        evaluation += (sum([game.state.territories[t].troops for t in my_territories])
+                        - sum([game.state.territories[t].troops for t in enemy_territories]))
+
+        return evaluation
 def main():
     
     # Get the game object, which will connect you to the engine and
@@ -65,6 +81,8 @@ def main():
 
         # Get the engine's query (this will block until you receive a query).
         query = game.get_next_query()
+
+        print(bot_state.heuristic(game), flush=True)
 
         # Based on the type of query, respond with the correct move.
         def choose_move(query: QueryType) -> MoveType:
@@ -314,6 +332,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
     if move:
         return move
 
+    # end move.
     return game.move_attack_pass(query)
 
 
