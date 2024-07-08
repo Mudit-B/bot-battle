@@ -31,6 +31,7 @@ class BotState():
     def __init__(self):
         self.enemy: Optional[int] = None
         self.target_continent = None
+        self.max_depth = 1
 
     def update_target_continent(self, game: Game):
         """Update the target continent based on the current game state."""
@@ -52,7 +53,8 @@ class BotState():
         # Determine the continent closest to being captured by us
         self.target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
 
-    def heuristic(self, game):
+    # assume: this is optimal 
+    def heuristic(self, game: Game) -> float:
         """Get a heuristic value for the current game state for implementing minimax"""
         evaluation = 0
         my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
@@ -64,11 +66,29 @@ class BotState():
 
         bordering_territories = game.state.get_all_adjacent_territories(border_territories)
         enemy_territories = set(bordering_territories) - set(my_territories)
+        
+        # Border Security Threat = sum of # of neighboring enemy troops
+        border_security_threat = sum([game.state.territories[t].troops for t in enemy_territories])
 
-        evaluation += (sum([game.state.territories[t].troops for t in my_territories])
-                        - sum([game.state.territories[t].troops for t in enemy_territories]))
+        for territory in border_territories:
+            border_security_ratio = game.state.territories[territory].troops / border_security_threat
+            evaluation += (1 / border_security_ratio)
 
+        # enemy territory ratio part
+        total_territories = len(game.state.territories)
+        num_enemy_territories = sum(enemy_territories)
+        evaluation += num_enemy_territories / total_territories
         return evaluation
+
+    def minimax(self, depth, turn, evaluation):
+        if depth == self.max_depth: return evaluation
+        if turn % 5 == 0:
+            # our turn
+            
+            pass
+        else:
+            # enemy turn
+            pass
 def main():
     
     # Get the game object, which will connect you to the engine and

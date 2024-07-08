@@ -317,7 +317,8 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                 target_troops = game.state.territories[target].troops
 
                 # Calculate the probability of success
-                probability = attacker_troops / target_troops if target_troops > 0 else float('inf')
+                if target_troops > 0:
+                    probability = bot_state.find_probability_of_success(attacker_troops, target_troops) 
 
                 # Determine if this is a favorable attack
                 is_favorable_attack = (attacker_troops - target_troops >= 2)
@@ -336,9 +337,6 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                     target_territories.append(territory)
         return target_territories
     
-    if bot_state.heuristic(game) < -10:
-        return game.move_attack_pass(query)
-
     target_territories = find_best_target_continent(bordering_territories)
     # attack the target territory with the highest probability of success if possible.
     move = attack_highest_probability(target_territories)
