@@ -34,7 +34,9 @@ class MiniMax:
         
         # player id 
         self.me = game.state.me.player_id
-        
+    
+    def get_next_player(self, current_player):
+        return (current_player + 1) % 5
 
     def get_continent_control(self, player_id):
         continents = self.state.map.get_continents()
@@ -55,12 +57,12 @@ class MiniMax:
             print(f"Minimax called with depth {depth}, player {player_number}, evaluation {evaluation}")
             return evaluation
         
-        if player_number % 5 == self.me:  # Assuming 5 players
+        if player_number == self.me:
             max_eval = float('-inf')
             for move in self.get_possible_moves(player_number):
                 move_done = self.apply_move(move)
                 # Run till depth == 0
-                eval = self.minimax(depth - 1, player_number + 1, alpha, beta)
+                eval = self.minimax(depth - 1, self.get_next_player(player_number), alpha, beta)
 
                 # Undo to original game state
                 self.undo_move(move_done)
@@ -75,7 +77,7 @@ class MiniMax:
             for move in self.get_possible_moves(player_number):
                 # Copy the game state.
                 move_done = self.apply_move(move)
-                eval = self.minimax(depth - 1, player_number + 1, alpha, beta)
+                eval = self.minimax(depth - 1, self.get_next_player(player_number), alpha, beta)
                 # Undo to original game state
                 self.undo_move(move_done)
                 min_eval = min(min_eval, eval)
@@ -95,19 +97,20 @@ class MiniMax:
             for adjacent in adjacent_territories:
                 if self.state.territories[adjacent].occupier != player_number:
                     moves.append((territory, adjacent))
-        print(f"Generated moves for player {player_number}: {moves}")
+        print(f"Generated moves for player {player_number}: {[(self.state.map._vertex_names[a],self.state.map._vertex_names[b]) for a, b in moves]}")
         return moves
 
     def apply_move(self, move):
         from_territory, to_territory = move
-        print(len(self.state.recording), "Attack from: ", from_territory,"To:", to_territory, flush=True)
+
+        print(len(self.state.recording), "Attack from: ", self.state.map._vertex_names[from_territory],"To:", self.state.map._vertex_names[to_territory], flush=True)
         attacker_troops = self.state.territories[from_territory].troops
         defender_troops = self.state.territories[to_territory].troops
 
         original_troops = (attacker_troops, defender_troops)
         occupier = to_territory
         # Simulate a simple battle outcome
-        if attacker_troops >= defender_troops:
+        if attacker_troops > defender_troops:
             occupier = from_territory
             self.state.territories[to_territory].occupier = self.state.territories[from_territory].occupier
             self.state.territories[to_territory].troops = attacker_troops - defender_troops
@@ -161,7 +164,7 @@ class MiniMax:
 
         for move in self.get_possible_moves(player_number):
             move_done = self.apply_move(move)
-            value = self.minimax(depth - 1, player_number + 1)
+            value = self.minimax(depth - 1, self.get_next_player(player_number))
             self.undo_move(move_done)
 
             if value > best_value:

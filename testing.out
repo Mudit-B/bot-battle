@@ -354,3 +354,7 @@
 [engine]: match complete, outcome was {result_type='PLAYER_BANNED' ban_type='CUMULATIVE_TIMEOUT' player=4 reason='You took too long to respond.'}
 [engine]: match complete, outcome was {result_type='SUCCESS' ranking=[0, 1, 4, 2, 3]}
 [engine]: match complete, outcome was {result_type='SUCCESS' ranking=[0, 4, 1, 3, 2]}
+[engine]: match complete, outcome was {result_type='PLAYER_BANNED' ban_type='TIMEOUT' player=3 reason='You took too long to respond.'}
+[engine]: match complete, outcome was {result_type='SUCCESS' ranking=[0, 2, 1, 4, 3]}
+[engine]: match complete, outcome was {result_type='SUCCESS' ranking=[0, 4, 3, 1, 2]}
+[engine]: match complete, outcome was {result_type='PLAYER_BANNED' ban_type='CUMULATIVE_TIMEOUT' player=2 reason='You took too long to respond.'}
