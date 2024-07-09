@@ -37,6 +37,9 @@ class MiniMax:
     
     def get_next_player(self, current_player):
         return (current_player + 1) % 5
+    
+    def get_previous_player(self, current_player):
+        return (current_player - 1) % 5
 
     def get_continent_control(self, player_id):
         continents = self.state.map.get_continents()
@@ -53,7 +56,7 @@ class MiniMax:
 
     def minimax(self, depth, player_number, alpha=float('-inf'), beta=float('inf')) -> float:
         if depth == 0:
-            evaluation = self.heuristic(player_number)
+            evaluation = self.heuristic(self.get_previous_player(player_number))
             print(f"Minimax called with depth {depth}, player {player_number}, evaluation {evaluation}")
             return evaluation
         
@@ -170,7 +173,9 @@ class MiniMax:
             if value > best_value:
                 best_value = value
                 best_move = move
-
+        # If the best eval is less than no move eval then return None
+        if best_value < self.heuristic(self.me):
+            return None
         return best_move
 # We will store our enemy in the bot state.
 class BotState():
