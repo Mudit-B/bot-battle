@@ -97,8 +97,9 @@ class MiniMax:
         border_player_terrs = self.state.get_all_border_territories(player_territories)
         for territory in border_player_terrs:
             adjacent_territories = self.state.map.get_adjacent_to(territory)
-            for adjacent in adjacent_territories:
-                if self.state.territories[adjacent].occupier != player_number:
+            enemy_adjacent = set(adjacent_territories) - set(player_territories)
+            for adjacent in enemy_adjacent:
+                if self.state.territories[adjacent].troops > 2:
                     moves.append((territory, adjacent))
         print(f"Generated moves for player {player_number}: {[(self.state.map._vertex_names[a],self.state.map._vertex_names[b]) for a, b in moves]}")
         return moves
@@ -134,30 +135,31 @@ class MiniMax:
         
     def heuristic(self, player_id):
         """Get a heuristic value for the current game state for implementing minimax"""
-        evaluation = 0
         my_territories = self.state.get_territories_owned_by(player_id)
 
         # We will place troops along the territories on our border.
         border_territories = self.state.get_all_border_territories(
             self.state.get_territories_owned_by(player_id)
         )
-
         bordering_territories = self.state.get_all_adjacent_territories(border_territories)
         enemy_territories = set(bordering_territories) - set(my_territories)
 
-        evaluation += (sum([self.state.territories[t].troops for t in my_territories])
-                        - sum([self.state.territories[t].troops for t in enemy_territories]))
+        evaluation = len(my_territories)
+        # evaluation += (sum([self.state.territories[t].troops for t in my_territories])
+        #                 - sum([self.state.territories[t].troops for t in enemy_territories]))
 
+        # Calculate the percentage of each continent controlled by us
+        continent_control = {}
         for continent, territories in self.state.map.get_continents().items():
-            my_control = len(set(territories) & set(my_territories))
-            enemy_control = len(set(territories) & enemy_territories)
-            continent_bonus = self.state.map.get_continent_bonus(continent)
-            
-            if my_control == len(territories):
-                # Full control of a continent
-                evaluation += continent_bonus * 2
-            else:
-                evaluation += (my_control - enemy_control) * continent_bonus / len(territories)
+            owned = len(set(territories) & set(my_territories))
+            total = len(territories)
+            continent_control[continent] = (owned / total, total - owned)
+
+        for continent in continent_control:
+            # just add a small number to signify additional continent control.
+            evaluation += continent_control[continent][0] *  100
+            # else:
+            #     evaluation += (my_control - enemy_control) * continent_bonus / len(territories)
         return evaluation
     
     def get_best_move(self, depth):
@@ -170,12 +172,10 @@ class MiniMax:
             value = self.minimax(depth - 1, self.get_next_player(player_number))
             self.undo_move(move_done)
 
-            if value > best_value:
+            if value >= best_value:
                 best_value = value
                 best_move = move
         # If the best eval is less than no move eval then return None
-        if best_value < self.heuristic(self.me):
-            return None
         return best_move
 # We will store our enemy in the bot state.
 class BotState():
@@ -428,10 +428,19 @@ def handle_troops_after_attack(game: Game, bot_state: BotState, query: QueryTroo
     # which territory was the attacking territory.
     record_attack = cast(RecordAttack, game.state.recording[query.record_attack_id])
     move_attack = cast(MoveAttack, game.state.recording[record_attack.move_attack_id])
-
-    # We will always move the maximum number of troops we can.
-    return game.move_troops_after_attack(query, game.state.territories[move_attack.attacking_territory].troops - 1)
-
+    
+    defender = move_attack.defending_territory
+    attacker = move_attack.attacking_territory
+    
+    adjacent_to_def =  game.state.map.get_adjacent_to(defender)
+    mine = game.state.get_territories_owned_by(game.state.me.player_id)
+    bordering = set(adjacent_to_def) - set(mine)
+    if bordering:
+        # We will always move the maximum number of troops we can.
+        return game.move_troops_after_attack(query, game.state.territories[move_attack.attacking_territory].troops - 1)
+    else:
+        move_troops = min(3, game.state.territories[move_attack.attacking_territory].troops - 1)
+        return game.move_troops_after_attack(query, move_troops)
 
 def handle_defend(game: Game, bot_state: BotState, query: QueryDefend) -> MoveDefend:
     """If you are being attacked by another player, you must choose how many troops to defend with."""

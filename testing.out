@@ -358,3 +358,9 @@
 [engine]: match complete, outcome was {result_type='SUCCESS' ranking=[0, 2, 1, 4, 3]}
 [engine]: match complete, outcome was {result_type='SUCCESS' ranking=[0, 4, 3, 1, 2]}
 [engine]: match complete, outcome was {result_type='PLAYER_BANNED' ban_type='CUMULATIVE_TIMEOUT' player=2 reason='You took too long to respond.'}
+[engine]: match complete, outcome was {result_type='SUCCESS' ranking=[0, 2, 3, 4, 1]}
+[engine]: match complete, outcome was {result_type='PLAYER_BANNED' ban_type='TIMEOUT' player=2 reason="You didn't open 'to_engine' for writing or 'from_engine.pipe' for reading in time."}
+[engine]: match complete, outcome was {result_type='PLAYER_BANNED' ban_type='TIMEOUT' player=2 reason="You didn't open 'to_engine' for writing or 'from_engine.pipe' for reading in time."}
+[engine]: match complete, outcome was {result_type='SUCCESS' ranking=[1, 2, 4, 0, 3]}
+[engine]: match complete, outcome was {result_type='SUCCESS' ranking=[0, 3, 2, 4, 1]}
+[engine]: match complete, outcome was {result_type='SUCCESS' ranking=[1, 0, 4, 2, 3]}
