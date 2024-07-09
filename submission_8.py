@@ -50,9 +50,9 @@ class MiniMax:
         return continent_control
 
     def minimax(self, depth, player_number, alpha=float('-inf'), beta=float('inf')) -> float:
-        print(f"Minimax called with depth {depth}, player {player_number}")
         if depth == 0:
             evaluation = self.heuristic(player_number)
+            print(f"Minimax called with depth {depth}, player {player_number}, evaluation {evaluation}")
             return evaluation
         
         if player_number % 5 == self.me:  # Assuming 5 players
