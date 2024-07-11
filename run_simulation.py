@@ -6,7 +6,7 @@ n = int(sys.argv[1])
 win_counters = [0, 0, 0, 0, 0]
 for _ in range(n):
     result = subprocess.run(
-        ["python3", "match_simulator.py", "--submissions", "2:submission_4.py","3:submission_8.py", "--engine"],
+        ["python3", "match_simulator.py", "--submissions", "4:submission_4.7.5.1.py","1:submission_4.7.5.1_choke_points.py", "--engine"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True
