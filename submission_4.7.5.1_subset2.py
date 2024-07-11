@@ -32,6 +32,7 @@ class BotState():
     def __init__(self):
         self.enemy: Optional[int] = None
         self.target_continent = None
+        self.conquered_once = False
         
         self.australia = set(range(38, 42))
         self.south_africa = set(range(32, 38))
@@ -125,10 +126,10 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
     if len(available) != 0:
         if left_australia:
             selected_territory = random.choice(list(left_australia))
-        elif left_south_africa:
-            selected_territory = random.choice(list(left_south_africa))
         elif left_south_america:
             selected_territory = random.choice(list(left_south_america))
+        elif left_south_africa:
+            selected_territory = random.choice(list(left_south_africa))
         else:
             # We will pick the one with the most connections to our territories
             # this should make our territories clustered together a little bit.
@@ -140,10 +141,10 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
     else:
         if left_australia:
             selected_territory = random.choice(list(left_australia))
-        elif left_south_africa:
-            selected_territory = random.choice(list(left_south_africa))
         elif left_south_america:
             selected_territory = random.choice(list(left_south_america))
+        elif left_south_africa:
+            selected_territory = random.choice(list(left_south_africa))
         else:
             selected_territory = sorted(unclaimed_territories, key=lambda x: len(game.state.map.get_adjacent_to(x)), reverse=True)[0]
 
@@ -365,7 +366,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                         sum_continent_enemy += game.state.territories[t].troops
                     else:
                         # penalty just for 1's and should avoid over extending.
-                        my_score += game.state.territories[t].troops - 1 
+                        my_score += game.state.territories[t].troops - 2
                 break
 
         if get_continent_of_territory(attacker) != get_continent_of_territory(target):
@@ -380,7 +381,8 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
     def attack_highest_probability(territories: list[int]) -> Optional[MoveAttack]:
         best_probability = 0
         best_move = None
-        other_moves = []
+        actual_best = 0
+        must_make = None
 
         for target in territories:
             # Find my attackers
@@ -406,10 +408,10 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                 if is_favorable_attack and probability > best_probability:
                     best_probability = probability
                     best_move = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
-                elif (attacker_troops - target_troops >= 2):
-                    other_moves.append((attacker, target))
-
-        
+                elif (attacker_troops - target_troops >= 2) and probability > actual_best:
+                    actual_best = probability
+                    must_make = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
+         
         # This is the case where we might get sorta stuck??? So try to only and stay with 3.
         # if not best_move:
         #     if not other_moves: return best_move
@@ -426,6 +428,8 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
         #             best_move = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
 
         #     bot_state.mark_only_move_three = True
+        if not best_move and (bot_state.conquered_once == False):
+            return must_make
         return best_move
 
     def find_best_target_continent(territories: list[int]) -> list[int]:
@@ -453,6 +457,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
 
 def handle_troops_after_attack(game: Game, bot_state: BotState, query: QueryTroopsAfterAttack) -> MoveTroopsAfterAttack:
     """After conquering a territory in an attack, you must move troops to the new territory."""
+    bot_state.conquered_once = True
     
     # First we need to get the record that describes the attack, and then the move that specifies
     # which territory was the attacking territory.
@@ -496,6 +501,7 @@ def handle_fortify(game: Game, bot_state: BotState, query: QueryFortify) -> Unio
     """At the end of your turn, after you have finished attacking, you may move a number of troops between
     any two of your territories (they must be adjacent)."""
     
+    bot_state.conquered_once = False
     """
     Previous function was really suboptimal i think?
     Idea is to find max threat
