@@ -1,6 +1,5 @@
 from collections import defaultdict, deque
 import random
-import math
 import os
 from typing import Optional, Tuple, Union, cast
 from risk_helper.game import Game
@@ -27,34 +26,6 @@ from risk_shared.records.moves.move_troops_after_attack import MoveTroopsAfterAt
 from risk_shared.records.record_attack import RecordAttack
 from risk_shared.records.types.move_type import MoveType
 
-class Node:
-    def __init__(self, vertex: int):
-        self.vertex = vertex
-        self.children: list[Node] = []
-
-class Tree:
-    def __init__(self, root):
-        self.root = root
-    
-    def distributing_in_path(self, game: Game, target):
-        # calc value
-        curr_troops = 0
-        other_sum = 0
-        for child in self.root.children:
-            if child.vertex == target:
-                curr_troops += self.total_troops_in_path(game, child)
-            else:
-                other_sum += self.total_troops_in_path(game, child)
-        if (other_sum + curr_troops) == 0: return 1
-        return (curr_troops / (curr_troops + other_sum))
-        
-    def total_troops_in_path(self, game: Game, child):
-        if child.children == []:
-            return game.state.territories[child.vertex].troops
-        s = game.state.territories[child.vertex].troops
-        for children in child.children:
-            s += self.total_troops_in_path(game, children)
-        return s
 
 
 # We will store our enemy in the bot state.
@@ -62,12 +33,15 @@ class BotState():
     def __init__(self):
         self.enemy: Optional[int] = None
         self.target_continent = None
+        self.conquered_once = False
         
         self.australia = set(range(38, 42))
         self.south_africa = set(range(32, 38))
         self.south_america = set(range(28, 32))
 
-        self.fraction_to_move :float = 0.0
+        self.path = []
+        # no adjancey list nonsense for dfs now
+        self.map_connections = {0: [1, 5, 21], 1: [6, 5, 0, 8], 2: [3, 8, 30], 3: [7, 6, 8, 2], 4: [5, 6, 7, 10], 5: [4, 0, 1, 6], 6: [7, 4, 5, 1, 8, 3], 7: [4, 6, 3], 8: [3, 6, 1, 2], 9: [11, 12, 10, 15], 10: [12, 4, 9], 11: [14, 12, 9, 15, 13], 12: [14, 10, 9, 11], 13: [22, 14, 11, 15, 36, 34], 14: [16, 26, 12, 11, 13, 22], 15: [13, 11, 9, 36], 16: [17, 26, 14, 22, 18], 17: [23, 25, 26, 16, 18, 24], 18: [24, 17, 16, 22], 19: [21, 27, 25, 23], 20: [21, 23], 21: [0, 27, 19, 23, 20], 22: [18, 16, 14, 13, 34, 33], 23: [20, 21, 19, 25, 17], 24: [17, 18, 40], 25: [27, 26, 17, 23, 19], 26: [25, 14, 16, 17], 27: [21, 25, 19], 28: [29, 31], 29: [36, 30, 31, 28], 30: [2, 31, 29], 31: [29, 30, 28], 32: [33, 36, 37], 33: [22, 34, 36, 32, 37, 35], 34: [22, 13, 36, 33], 35: [33, 37], 36: [33, 34, 13, 15, 29, 32], 37: [35, 33, 32], 38: [39, 41], 39: [40, 41, 38], 40: [39, 24, 41], 41: [38, 39, 40]}
 
         self.mark_only_move_three = False
 
@@ -91,6 +65,28 @@ class BotState():
         # Determine the continent closest to being captured by us
         self.target_continent = max(continent_control, key=lambda x: (continent_control[x][0], -continent_control[x][1]))
 
+    # returns the path we need.
+    def dfs_path(self, vertices, start) -> list[int]:
+        # subproblem
+        def dfs(current, path, remaining) -> list[int]:
+            path.append(current)
+            if current in remaining:
+                remaining.remove(current)
+            
+            if not remaining:
+                return path
+            
+            for neighbor in self.map_connections[current]:
+                if neighbor in remaining or (not remaining and neighbor == start):
+                    result = dfs(neighbor, path.copy(), remaining.copy())
+                    if result:
+                        return result
+            
+            return []
+
+        remaining = set(vertices) - {start}
+        result = dfs(start, [], remaining)
+        return result if result else []
     
 def main():
     
@@ -141,16 +137,19 @@ def handle_claim_territory(game: Game, bot_state: BotState, query: QueryClaimTer
     until all the territories have been claimed by players."""
 
     unclaimed_territories = game.state.get_territories_owned_by(None)
-    my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
+    my_territories = set(game.state.get_territories_owned_by(game.state.me.player_id))
 
     # We will try to always pick new territories that are next to ones that we own,
     # or a random one if that isn't possible.
-    adjacent_territories = game.state.get_all_adjacent_territories(my_territories)
+    adjacent_territories = game.state.get_all_adjacent_territories(list(my_territories))
 
     # We can only pick from territories that are unclaimed and adjacent to us.
     available = list(set(unclaimed_territories) & set(adjacent_territories))
 
     left_australia = set(unclaimed_territories) & set(bot_state.australia)
+    if left_australia != bot_state.australia - my_territories:
+        bot_state.australia = set() # avoid going here at all costs
+    
     left_south_africa = set(unclaimed_territories) & set(bot_state.south_africa)
     left_south_america = set(unclaimed_territories) & set(bot_state.south_america)
 
@@ -190,78 +189,12 @@ def handle_place_initial_troop(game: Game, bot_state: BotState, query: QueryPlac
         game.state.get_territories_owned_by(game.state.me.player_id)
     )
 
-   # We will distribute troops across our border territories.
-    total_troops = game.state.me.troops_remaining
-    distributions = defaultdict(lambda: 0)
-    border_territories = game.state.get_all_border_territories(
-        game.state.get_territories_owned_by(game.state.me.player_id)
-    )
+    # We will place a troop in the border territory with the least troops currently
+    # on it. This should give us close to an equal distribution.
+    border_territory_models = [game.state.territories[x] for x in border_territories]
+    min_troops_territory = min(border_territory_models, key=lambda x: x.troops)
 
-    # We need to remember we have to place our matching territory bonus
-    # if we have one.
-    if len(game.state.me.must_place_territory_bonus) != 0:
-        assert total_troops >= 2
-        distributions[game.state.me.must_place_territory_bonus[0]] += 2
-        total_troops -= 2
-
-    # Prioritize capturing whole continents
-    continents = game.state.map.get_continents()
-    my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
-
-    # this gets the target continent.
-    bot_state.update_target_continent(game)
-    target_continent = bot_state.target_continent
-
-    def eval_terr(territory):
-        # like chess we eval the val of this territory
-        value = 0
-        continent = None
-        for k, territories in continents.items():
-            if territory in territories:
-                continent = k
-                break
-        if continent == target_continent:
-            value += 100
-        # 1% this too hit and trial this.
-        value += 0.5 * len(set(game.state.map.get_adjacent_to(territory)) & set(my_territories))
-        return value
-
-    def find_best_territory(lst):
-        selected_territory = None
-        for territory in lst:
-            if selected_territory is None:
-                selected_territory = territory
-            else:
-                if eval_terr(territory) > eval_terr(selected_territory):
-                    selected_territory = territory
-        return selected_territory
-
-    # Find the best border territory to distribute troops
-    best_border_territory = find_best_territory(border_territories)
-
-    if best_border_territory:
-        distributions[best_border_territory] += total_troops
-    else:
-        # If no specific border territory is found, distribute the maximum number of troops to the territory with the highest attack potential
-        max_attack_territory = max(border_territories, key=lambda x: game.state.territories[x].troops)
-        distributions[max_attack_territory] += total_troops
-
-    # return game.move_distribute_troops(query, distributions)
-    if best_border_territory is not None:
-        return game.move_place_initial_troop(query, best_border_territory)
-    else:
-        # We will place troops along the territories on our border.
-        border_territories = game.state.get_all_border_territories(
-            game.state.get_territories_owned_by(game.state.me.player_id)
-        )
-
-        # We will place a troop in the border territory with the least troops currently
-        # on it. This should give us close to an equal distribution.
-        border_territory_models = [game.state.territories[x] for x in border_territories]
-        min_troops_territory = min(border_territory_models, key=lambda x: x.troops)
-
-        return game.move_place_initial_troop(query, min_troops_territory.territory_id)
-
+    return game.move_place_initial_troop(query, min_troops_territory.territory_id)
 
 def handle_redeem_cards(game: Game, bot_state: BotState, query: QueryRedeemCards) -> MoveRedeemCards:
     """After the claiming and placing initial troops phases are over, you can redeem any
@@ -361,7 +294,14 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
     """After the troop phase of your turn, you may attack any number of times until you decide to
     stop attacking (by passing). After a successful attack, you may move troops into the conquered
     territory. If you eliminated a player you will get a move to redeem cards and then distribute troops."""
+    def get_continent_of_territory(territory):
+        continents = game.state.map.get_continents()
+        for k, v in continents.items():
+            if territory in v:
+                return k
+        return -1
 
+    save_move_for_bot_path = [0, 0]
     # We will attack someone.
     my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
     bordering_territories = game.state.get_all_adjacent_territories(my_territories)
@@ -371,42 +311,6 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
     bot_state.update_target_continent(game)
     target_continent = bot_state.target_continent
 
-    def get_continent_of_territory(territory):
-        continents = game.state.map.get_continents()
-        for k, v in continents.items():
-            if territory in v:
-                return k
-        return -1
-    
-    def build_dfs_tree(game, bot_state, attacking_vertex):
-        my_territories = game.state.get_territories_owned_by(game.state.me.player_id)
-        continents = game.state.map.get_continents()
-        
-        bot_state.update_target_continent(game)
-        target_continent: int = bot_state.target_continent
-        
-        opponent_territories = set(range(42)) - set(my_territories)
-        target_territories = set(continents[target_continent]) & opponent_territories
-        
-        def dfs(vertex, visited=None):
-            if visited is None:
-                visited = set()
-            
-            node = Node(vertex)
-            visited.add(vertex)
-            
-            adjacent_territories = game.state.map.get_adjacent_to(vertex)
-            for adjacent in adjacent_territories:
-                if adjacent in target_territories and adjacent not in visited:
-                    child_node = dfs(adjacent, visited)
-                    node.children.append(child_node)
-            
-            return node
-        
-        root_node = dfs(attacking_vertex)
-        attack_tree = Tree(root_node)
-
-        return attack_tree
     
     def is_positive_move(attacker, target):
         # attacker surronding
@@ -434,20 +338,33 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
             my_score += attacker_troops
         # print(game.state.recording, my_score, self.attacker, target)
         if sum_continent_enemy < my_score:
-
-            # create the dfs path for capturing
-            attack_tree = build_dfs_tree(game, bot_state, attacker)
-            bot_state.fraction_to_move = attack_tree.distributing_in_path(game, target)
             return True
         return False
 
+    if bot_state.path != []:
+        # print(bot_state.path)
+        target = bot_state.path.pop(0)
+        potential_attackers = set(game.state.map.get_adjacent_to(target)) & set(my_territories)
+        if potential_attackers != set():
+            attacker = max(potential_attackers, key=lambda x: game.state.territories[x].troops)
+            # print(attacker, flush=True)
 
+            attacker_troops = game.state.territories[attacker].troops
+            target_troops = game.state.territories[target].troops
 
-    def attack_highest_probability(territories: list[int]) -> Optional[MoveAttack]:
+            is_favorable_attack = (attacker_troops - target_troops >= 2) and is_positive_move(attacker, target)
+
+            if is_favorable_attack:
+                return game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
+
+    bot_state.path = []
+
+    def attack_highest_probability(territories: list[int]):
+
         best_probability = 0
         best_move = None
-        save_fraction_best = 0.0
-        other_moves = []
+        actual_best = 0
+        must_make = None
 
         for target in territories:
             # Find my attackers
@@ -471,33 +388,17 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
                 # Determine if this is a favorable attack
                 is_favorable_attack = (attacker_troops - target_troops >= 2) and is_positive_move(attacker, target)
                 if is_favorable_attack and probability > best_probability:
+                    save_move_for_bot_path[0] = attacker
+                    save_move_for_bot_path[1] = target
                     best_probability = probability
                     best_move = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
-                    save_fraction_best = bot_state.fraction_to_move
-                elif (attacker_troops - target_troops >= 2):
-                    other_moves.append((attacker, target))
-
-        
-        # This is the case where we might get sorta stuck??? So try to only and stay with 3.
-        # if not best_move:
-        #     if not other_moves: return best_move
-        #     best_probability = 0
-        #     for attacker, target in other_moves:
-                
-        #         attacker_troops = game.state.territories[attacker].troops
-        #         target_troops = game.state.territories[target].troops
-
-        #         probability = attacker_troops / target_troops if target_troops > 0 else float('inf')
-
-        #         if probability > best_probability:
-        #             best_probability = probability
-        #             best_move = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
-
-        #     bot_state.mark_only_move_three = True
-        if best_move != None:
-            bot_state.fraction_to_move = save_fraction_best
-
-        return best_move
+                elif (attacker_troops - target_troops >= 2) and probability > actual_best:
+                    actual_best = probability
+                    must_make = game.move_attack(query, attacker, target, min(3, attacker_troops - 1))
+         
+        if not best_move and (bot_state.conquered_once == False):
+            return must_make, False
+        return best_move, True
 
     def find_best_target_continent(territories: list[int]) -> list[int]:
         # find territories to those in the target continent
@@ -511,12 +412,20 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
     target_territories = find_best_target_continent(bordering_territories)
 
     # We will attack the target territory with the highest probability of success if possible.
-    move = attack_highest_probability(target_territories)
+    move, isContinentCapture = attack_highest_probability(target_territories)
     if move:
+        if isContinentCapture:
+            attacker, defender = save_move_for_bot_path
+            continet_to_be_captured = get_continent_of_territory(defender)
+            vertices_to_capture = set(game.state.map.get_continents()[continet_to_be_captured]) - set(my_territories)
+            bot_state.path = bot_state.dfs_path(vertices_to_capture, defender)
+            if bot_state.path != []:
+                bot_state.path.pop(0)
+            print("HERE, ", attacker, defender, vertices_to_capture, bot_state.path, flush=True)
         return move
 
     # Otherwise, attack any bordering territory with the highest probability of success.
-    move = attack_highest_probability(bordering_territories)
+    move, isContinentCapture = attack_highest_probability(bordering_territories)
     if move:
         return move
 
@@ -524,6 +433,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
 
 def handle_troops_after_attack(game: Game, bot_state: BotState, query: QueryTroopsAfterAttack) -> MoveTroopsAfterAttack:
     """After conquering a territory in an attack, you must move troops to the new territory."""
+    bot_state.conquered_once = True
     
     # First we need to get the record that describes the attack, and then the move that specifies
     # which territory was the attacking territory.
@@ -539,21 +449,14 @@ def handle_troops_after_attack(game: Game, bot_state: BotState, query: QueryTroo
     enemy_adj_to_target = set(adj_to_target) - set(mine)
     curr_adj_to_attacker = set(game.state.map.get_adjacent_to(attacker)) - set(mine)
 
-    # move atleast 3 at min anways.
-    move_troops = min(3, game.state.territories[move_attack.attacking_territory].troops - 1)
-    move_troops = max(move_troops, math.floor(bot_state.fraction_to_move * (game.state.territories[move_attack.attacking_territory].troops - 1)))
-    print('here', flush=True)
-    print(game.state.territories[move_attack.attacking_territory].troops, flush=True)
-    print(bot_state.fraction_to_move, flush=True)
-    print(math.floor(bot_state.fraction_to_move * game.state.territories[move_attack.attacking_territory].troops), flush=True)
     # If the target has some new attacker
-    # if (curr_adj_to_attacker <= (enemy_adj_to_target)):
+    if (curr_adj_to_attacker <= (enemy_adj_to_target)):
         # We will always move the maximum number of troops we can.
-    return game.move_troops_after_attack(query, move_troops)
-    # else:
-    #     # If there is no enemy then move only 3
-    #     move_troops = min(3, game.state.territories[move_attack.attacking_territory].troops - 1)
-    #     return game.move_troops_after_attack(query, move_troops)
+        return game.move_troops_after_attack(query, game.state.territories[move_attack.attacking_territory].troops - 1)
+    else:
+        # If there is no enemy then move only 3
+        move_troops = min(3, game.state.territories[move_attack.attacking_territory].troops - 1)
+        return game.move_troops_after_attack(query, move_troops)
 
 def handle_defend(game: Game, bot_state: BotState, query: QueryDefend) -> MoveDefend:
     """If you are being attacked by another player, you must choose how many troops to defend with."""
@@ -574,6 +477,7 @@ def handle_fortify(game: Game, bot_state: BotState, query: QueryFortify) -> Unio
     """At the end of your turn, after you have finished attacking, you may move a number of troops between
     any two of your territories (they must be adjacent)."""
     
+    bot_state.conquered_once = False
     """
     Previous function was really suboptimal i think?
     Idea is to find max threat

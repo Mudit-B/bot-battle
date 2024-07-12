@@ -1,0 +1,40 @@
+map_connections = {0: [1, 5, 21], 1: [6, 5, 0, 8], 2: [3, 8, 30], 3: [7, 6, 8, 2], 4: [5, 6, 7, 10], 5: [4, 0, 1, 6], 6: [7, 4, 5, 1, 8, 3], 7: [4, 6, 3], 8: [3, 6, 1, 2], 9: [11, 12, 10, 15], 10: [12, 4, 9], 11: [14, 12, 9, 15, 13], 12: [14, 10, 9, 11], 13: [22, 14, 11, 15, 36, 34], 14: [16, 26, 12, 11, 13, 22], 15: [13, 11, 9, 36], 16: [17, 26, 14, 22, 18], 17: [23, 25, 26, 16, 18, 24], 18: [24, 17, 16, 22], 19: [21, 27, 25, 23], 20: [21, 23], 21: [0, 27, 19, 23, 20], 22: [18, 16, 14, 13, 34, 33], 23: [20, 21, 19, 25, 17], 24: [17, 18, 40], 25: [27, 26, 17, 23, 19], 26: [25, 14, 16, 17], 27: [21, 25, 19], 28: [29, 31], 29: [36, 30, 31, 28], 30: [2, 31, 29], 31: [29, 30, 28], 32: [33, 36, 37], 33: [22, 34, 36, 32, 37, 35], 34: [22, 13, 36, 33], 35: [33, 37], 36: [33, 34, 13, 15, 29, 32], 37: [35, 33, 32], 38: [39, 41], 39: [40, 41, 38], 40: [39, 24, 41], 41: [38, 39, 40]}
+
+results = []
+# returns the path we need.
+def dfs_path(map_connections, vertices, start) -> list[int]:
+    # subproblem
+    results = []
+    def dfs(current, path, remaining) -> list[int]:
+        # path and remaining are different
+        path.append(current)
+
+        # There is a case where 1 -> 2 -> 3
+        # visit 2
+        # path [2]
+        # remaining {1, 3}
+        if current in remaining:
+            remaining.remove(current)
+        
+        # Return the curr path
+        if not remaining:
+            return path
+        
+        for neighbor in map_connections[current]:
+            if neighbor in remaining:
+                result = dfs(neighbor, path.copy(), remaining.copy())
+                results.append(result)
+
+                if result:
+                    return result
+        return []
+    
+    remaining = set(vertices) - {start}
+    result = dfs(start, [], remaining)
+    if results:
+        return max(results, key=len)
+    return []
+a = dfs_path(map_connections, {16, 18, 19, 20, 21, 22, 23, 25, 26, 27}, 23)
+print(a)
+print(len(a))
+print(len(tuple([16, 18, 19, 20, 21, 22, 23, 25, 26, 27])))
