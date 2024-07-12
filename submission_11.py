@@ -99,7 +99,10 @@ class BotState():
         if results:
             return max(results, key=len)
         return []
-   
+    
+    def get_num_alive(self, game):
+        return len([i for i in game.state.players if game.state.players[i].alive])
+    
 def main():
     
     # Get the game object, which will connect you to the engine and
@@ -356,6 +359,12 @@ def handle_distribute_troops(game: Game, bot_state: BotState, query: QueryDistri
     best_border_territory = find_best_territory(border_territories)
 
     if best_border_territory is not None:
+        if bot_state.get_num_alive(game) == 2:
+            get_ones = [t for t in my_territories if game.state.territories[t].troops == 1]
+            if len(get_ones) < total_troops:
+                for ones in get_ones:
+                    distributions[ones] += 1
+                    total_troops -= 1
         distributions[best_border_territory] += total_troops
     else:
         # If no specific border territory is found, distribute the maximum number of troops to the territory with the highest attack potential
@@ -411,7 +420,7 @@ def handle_attack(game: Game, bot_state: BotState, query: QueryAttack) -> Union[
         if get_continent_of_territory(attacker) != get_continent_of_territory(target):
             my_score += attacker_troops
         # print(game.state.recording, my_score, self.attacker, target)
-        if 2 * sum_continent_enemy < my_score:
+        if sum_continent_enemy < my_score:
             return True
         return False
 
@@ -540,6 +549,9 @@ def handle_troops_after_attack(game: Game, bot_state: BotState, query: QueryTroo
     # If the target has some new attacker
     if (curr_adj_to_attacker <= (enemy_adj_to_target)) or (bot_state.path != []):
         # We will always move the maximum number of troops we can.
+        if bot_state.get_num_alive(game) == 2:
+            if game.state.territories[move_attack.attacking_territory].troops > 10:
+                return game.move_troops_after_attack(query, game.state.territories[move_attack.attacking_territory].troops - 2)
         return game.move_troops_after_attack(query, game.state.territories[move_attack.attacking_territory].troops - 1)
     else:
         # If there is no enemy then move only 3
