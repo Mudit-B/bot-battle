@@ -6,7 +6,7 @@ n = int(sys.argv[1])
 win_counters = [0, 0, 0, 0, 0]
 for _ in range(n):
     result = subprocess.run(
-        ["python3", "match_simulator.py", "--submissions", "4:submission_4.7.5.1_path_finding.py","1:submission_4.7.5.1_subset2_path_finding2.py", "--engine"],
+        ["python3", "match_simulator.py", "--submissions", "4:submission_12.5_gacha_copying.py", "1:submission_12.5.5.py", "--engine"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True
@@ -24,7 +24,8 @@ for _ in range(n):
             ranking = list(map(int, ranking_str.split(',')))
 
             win_counters[ranking[0]] += 1
-
+        # elif "BANNED" in eighth_last_line:
+        #     break
         # Write the 8th last line to the output file
         with open("testing.out", "a") as file:
             file.write(eighth_last_line + "\n")

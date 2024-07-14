@@ -2,39 +2,8 @@ map_connections = {0: [1, 5, 21], 1: [6, 5, 0, 8], 2: [3, 8, 30], 3: [7, 6, 8, 2
 
 results = []
 # returns the path we need.
-def dfs_path(map_connections, vertices, start) -> list[int]:
-    # subproblem
-    results = []
-    def dfs(current, path, remaining) -> list[int]:
-        # path and remaining are different
-        path.append(current)
 
-        # There is a case where 1 -> 2 -> 3
-        # visit 2
-        # path [2]
-        # remaining {1, 3}
-        if current in remaining:
-            remaining.remove(current)
-        
-        # Return the curr path
-        if not remaining:
-            return path
-        
-        for neighbor in map_connections[current]:
-            if neighbor in remaining:
-                result = dfs(neighbor, path.copy(), remaining.copy())
-                results.append(result)
-
-                if result:
-                    return result
-        return []
-    
-    remaining = set(vertices) - {start}
-    result = dfs(start, [], remaining)
-    if results:
-        return max(results, key=len)
-    return []
-a = dfs_path(map_connections, {16, 18, 19, 20, 21, 22, 23, 25, 26, 27}, 23)
+a = dfs_path(map_connections, {17, 18, 23, 24, 27}, 18)
 print(a)
 print(len(a))
 print(len(tuple([16, 18, 19, 20, 21, 22, 23, 25, 26, 27])))
